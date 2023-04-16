@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.tymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Example09</title>
+</head>
+<body>
+	<h1>Example04</h1>
+	<hr>
+	<table border=1>
+		<tr>
+			<th>이름</th>
+			<th>나이</th>
+			<th>성별</th>
+			<th>오늘</th>
+		</tr>
+		<tr th:object="${vo}">
+			<td th:text="*{name}"></td>
+			<td th:text="*{age}"></td>
+			<td th:text="${gender}"></td>
+			<td th:text="${today}"></td>
+		</tr>
+	</table>
+</body>
+</html>

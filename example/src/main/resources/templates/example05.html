@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.tymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Example05</title>
+</head>
+<body>
+	<h1>Example04</h1>
+	<hr>
+	<table border=1>
+		<tr>
+			<th>총점</th>
+			<th>평균</th>
+		</tr>
+		<tr th:object="${MyScore}">
+			<td th:text="*{kor+eng+math}"></td>
+			<td th:text="*{(kor+eng+math)/3F}"></td>
+		</tr>
+	</table>
+</body>
+</html>
