@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 연결할 인터페이스 경로를 namespace에 작성 -->
+<mapper namespace="com.megait.example.mappers.BoardMapper">
+	<select id="getList" resultType="boardVO">
+		<![CDATA[
+		select * from tbl_board where BNO > 0
+		]]>
+	</select>
+</mapper>
