@@ -32,7 +32,7 @@ public class MyBatisConfig {
 	
 	// 1. Property 가져오기
 	@Bean
-	@ConfigurationProperties(prefix="spring.datasource")
+	@ConfigurationProperties(prefix="spring.datasource.hikari")
 	public HikariConfig hikariConfig() { return new HikariConfig(); }
 	
 	// 2. DataSource 설정
@@ -49,7 +49,8 @@ public class MyBatisConfig {
 		SqlSessionFactoryBean sfb = new SqlSessionFactoryBean();
 		sfb.setDataSource(dataSource());
 		// SQL query를 작성할 xml 경로 설정
-//		sfb.setMapperLocations(applicationContext.getResource("classpath*:/mappers/*.xml"));
+		sfb.setMapperLocations(applicationContext.getResources("classpath*:/mappers/*.xml"));
+		sfb.setConfigLocation(applicationContext.getResource("classpath:/config/config.xml"));
 		
 		try {
 			SqlSessionFactory factory = sfb.getObject();
