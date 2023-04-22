@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.tymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Example11</title>
+</head>
+<body>
+	<h1 th:text="${name + '님 조퇴입니다.'}">조퇴입니다.</h1>
+	<hr>
+	<h1><th:block th:text="${name}"></th:block>님 조퇴입니다.</h1>
+	<input type="button" th:value="${name}">
+</body>
+</html>

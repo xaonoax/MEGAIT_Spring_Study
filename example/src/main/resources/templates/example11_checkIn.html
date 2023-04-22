@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.tymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Example11</title>
+</head>
+<body>
+	<h1>CheckIn Page</h1>
+	<hr>
+	<form name="checkin" action="/ex/ex11_checkIn" method="get">
+		<fieldset>
+			<legend>Check Form</legend>
+			<input type="text" name="name">
+			<input type="button" value="출근" onclick="work(1)">
+			<input type="button" value="퇴근" onclick="work(2)">
+		</fieldset>
+	</form>
+</body>
+<script type="text/javascript">
+	function work(type) {
+		console.log(type);
+		
+		var frm = document.checkin;
+		
+		if (type==1) {
+			frm.action = "/ex/ex11_getToWork";
+		}
+		else {
+			frm.action = "/ex/ex11_leaveWork";
+		}
+		frm.submit();
+	}
+</script>
+</html>
