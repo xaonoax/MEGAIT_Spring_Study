@@ -18,5 +18,6 @@ public class BoardMapperTest {
 	@Test
 	public void testGetList() {
 		mapper.getList().forEach(board -> log.info(board.toString()));
+	
 	}
 }
