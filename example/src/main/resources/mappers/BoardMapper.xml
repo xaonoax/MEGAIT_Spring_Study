@@ -4,7 +4,33 @@
 <mapper namespace="com.megait.example.mappers.BoardMapper">
 	<select id="getList" resultType="boardVO">
 		<![CDATA[
-		select * from tbl_board where BNO > 0
+		SELECT * FROM TBL_BOARD WHERE BNO > 0
 		]]>
 	</select>
+	<insert id="insert">
+		/* BoardVO 걸 그대로 가져옴(bno)는 비워져서 옴 */
+		INSERT INTO TBL_BOARD(BNO, TITLE, CONTENT, WRITER)
+		VALUES(NEXTVAL(SEQ_BOARD), #{title}, #{content}, #{writer})
+	</insert>
+	<insert id="insertSelectKey_bno">
+		/*  태그 안에서는 주석을 이 태그로 사용해야 한다. */
+		/* 게시글 등록 전에 다음 시퀀스를 가져와서 매개 변수로 전달한다. */
+		<selectKey keyProperty="bno" order="BEFORE" resultType="Long">
+			SELECT NEXTVAL(SEQ_BOARD) FROM DUAL
+		</selectKey>
+		/* 위에서 전달받은 bno를 사용한다. */
+		INSERT INTO TBL_BOARD(BNO, TITLE, CONTENT, WRITER)
+		VALUES(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	<select id="read" resultType="boardVO">
+		SELECT * FROM TBL_BOARD WHERE BNO = #{bno}
+	</select>
+	<delete id="delete">
+		DELETE FROM TBL_BOARD WHERE BNO = #{bno}
+	</delete>
+	<update id="update">
+		UPDATE TBL_BOARD
+		SET TITLE = #{title}, CONTENT = #{content}, WRITER = #{writer}, UPDATEDATE = SYSDATE()
+		WHERE BNO = #{bno}
+	</update>
 </mapper>
