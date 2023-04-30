@@ -31,6 +31,11 @@ public class BoardController {
 		model.addAttribute("list", service.getList());
 	}
 	
+	@GetMapping("register")
+	public void register() {
+		
+	}
+	
 	@PostMapping("register")
 	public RedirectView register(BoardVO board, RedirectAttributes rttr) {
 		log.info("---------------------------");
@@ -47,7 +52,7 @@ public class BoardController {
 	}
 	
 	@GetMapping({"get", "get2"})
-	public void get(Long bno, HttpServletRequest request, Model model) {
+	public void get(@RequestParam("bno") Long bno, HttpServletRequest request, Model model) {
 		String reqURI = request.getRequestURI();
 		String reqContextPath = request.getContextPath();
 		String reqType = reqURI.substring(reqURI.indexOf(reqContextPath) + 7);
@@ -62,11 +67,20 @@ public class BoardController {
 		model.addAttribute("board", service.get(bno));
 	}
 	
+	@GetMapping("modify")
+	public void modify(@RequestParam("bno") Long bno, Model model) {
+		log.info("---------------------------");
+		log.info("[modify] " + bno);
+		log.info("---------------------------");
+		model.addAttribute("board", service.get(bno));
+	}
+	
 	@PostMapping("modify")
 	public RedirectView modify(BoardVO board, RedirectAttributes rttr) {
 		log.info("---------------------------");
-		log.info("[BoardController] modufy : " + board);
+		log.info("[BoardController] modify : " + board);
 		log.info("---------------------------");
+		
 		
 		if (service.modify(board)) {
 			// addAttribute()는 get방식으로 QueryString에 전달
@@ -79,11 +93,11 @@ public class BoardController {
 		
 		return new RedirectView("list");
 	}
-	
+		
 	@PostMapping("remove")
 	// @ 변수명이 같은 경우 RequestParam을 쓸 필요는 없으나
 	// 명시적으로 지정할 경우 파라미터 추가시 발생할 수 있는 예외를 막아준다.
-	public RedirectView remove(@RequestParam("bno")Long bno, RedirectAttributes rttr) throws Exception{
+	public RedirectView remove(@RequestParam("bno")Long bno, RedirectAttributes rttr) {
 		log.info("---------------------------");
 		log.info("[BoardController] remove : " + bno);
 		log.info("---------------------------");
@@ -93,7 +107,6 @@ public class BoardController {
 		}
 		else {
 			rttr.addFlashAttribute("result", "failure");
-			throw new Exception("지울 수 없습니다.");
 		}
 		
 		return new RedirectView("list");
