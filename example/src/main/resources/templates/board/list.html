@@ -1,10 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.tymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>List</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+	<meta name="description" content="">
+	<meta name="keyword" content="">
+	<link rel="stylesheet" href="/css/bootstrap/bootstrap.css" type="text/css">
+	<style>
+		@media (max-width: 918px) {
+			.writer {display: none;}
+			.regDate {display: none;}
+			.updateDate {display: none;}
+		}
+	</style>
+	<title>List</title>
 </head>
 <body>
-
+	<div class="wrapper">
+		<!-- Elements -->
+		<header class="major">
+			<h1>Board</h1>
+			<hr>
+			<p>게시물 목록</p>
+		</header>
+	
+		<!-- Table -->
+		<h3><a href="/board/register">Write</a></h3>
+		<div class="table-wrapper col-md-10">
+			<table class="table">
+				<thead>
+					<tr class="tHead">
+						<th class="bno">번호</th>
+						<th class="title">제목</th>
+						<th class="content">내용</th>
+						<th class="writer">작성자</th>
+						<th class="regdate">작성일</th>
+						<th class="updatedate">수정일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="board:${list}">
+						<tr class="tBody" th:object="${board}">
+							<td class="bno" th:text="*{bno}"></td>
+							<td class="title"><a th:text="*{title}" th:href="@{/board/get(bno=*{bno})}"></a></td>
+							<td class="content" th:text="*{content}"></td>
+							<td class="writer" th:text="*{writer}"></td>
+							<td class="regdate" th:text="*{regdate}"></td>
+							<td class="updatedate" th:text="*{updatedate}"></td>
+						</tr>
+					</th:block>
+				</tbody>
+				<tfoot>
+				
+				</tfoot>
+			</table>
+		</div>
+	</div>
 </body>
+<!-- <script th:src="@{js/jquery-3.6.4.min.js}"></script> -->
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous">
+</script>
+<script th:inline="javascript">
+	let bno = [[${bno}]];
+	console.log(bno);
+	
+	$(document).ready(function(){
+		if (bno == '') {
+			return;
+		}
+		
+		if (parseInt(bno) > 0) {
+			alert("Bulletin " + parseInt(bno) + " was registered.");
+		}
+	});
+</script>
 </html>
