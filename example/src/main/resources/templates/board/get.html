@@ -3,8 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <title>get</title>
+<link rel="stylesheet" href="/css/bootstrap/bootstrap.css" type="text/css">
 </head>
 <body>
-
+<div class="col-md-10" style="float:none; margin:0 auto;">
+	<br>
+	<h1>Board</h1>
+	<hr>
+	<form method="post" action="/board/remove">
+		<div class="wrap" th:object="${board}">
+			<h4 th:text="'번호 : ' + *{bno}"></h4>
+			<input type="hidden" name="bno" th:field="*{bno}" />
+			<hr>
+			<!-- 두 가지 방식으로 작성함 : modify와의 소스 공유를 위해 2번으로 결정 -->
+			<!-- 1번 : <h4 th:text="'제목 : ' + *{title}"></h4>  -->
+			타이틀 : <input name="title" type="text" th:field="*{title}" readonly />
+			<button th:text="*{title}"></button>
+			<hr>
+			<!-- 두 가지 방식으로 작성함 : modify와의 소스 공유를 위해 2번으로 결정 -->
+			<!-- 1번
+			<h4>내용</h4>
+			<p th:text="*{content}" ></p>
+			-->
+			<textarea name="content" style="resize:none;" rows="6" th:text="*{content}" readonly></textarea>
+			<hr>
+			<!-- 두 가지 방식으로 작성함 : modify와의 소스 공유를 위해 2번으로 결정 -->
+			<!-- 1번
+			<h4 th:text="'작성자 : ' + *{writer}"></h4>
+			-->
+			작성자 : <input name="writer" type="text" th:field="*{writer}" readonly />
+			<hr>
+			<h4 th:text="'작성일자 : ' + *{regdate}"></h4>
+			<h4 th:text="'수정일자 : ' + *{updatedate}"></h4>
+			<hr>
+			<input type="button" value="수정하기" onclick="goUpdate()">&nbsp;&nbsp;
+			<input type="submit" value="삭제하기" onclick="goUpdate()">
+		</div>
+	</form>
+</div>
 </body>
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous">
+</script>
+<script th:inline="javascript">
+	function goUpdate() {
+		let bno = [[${board.getBno()}]];
+		location.href = '/board/modify?bno=' + bno;
+	}
+</script>
 </html>
