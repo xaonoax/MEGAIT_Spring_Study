@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.megait.example.beans.vo.BoardVO;
+import com.megait.example.beans.vo.Criteria;
+import com.megait.example.beans.vo.PageDTO;
 import com.megait.example.services.BoardService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +26,21 @@ public class BoardController {
 	private final BoardService service;
 	
 	@GetMapping("list")
-	public void list(Model model) {
-		log.info("---------------------------");
-		log.info("[BoardController] list()");
-		log.info("---------------------------");
-		model.addAttribute("list", service.getList());
-	}
+	public void list(Criteria cri, Model model) {
+	log.info("---------------------------");
+	log.info("[BoardController] list()");
+	log.info("---------------------------");
+	
+	model.addAttribute("list", service.getList(cri));
+	model.addAttribute("pageMaker", new PageDTO(cri, service.getTotal()));
+}
+	
+//	public void list(Model model) {
+//		log.info("---------------------------");
+//		log.info("[BoardController] list()");
+//		log.info("---------------------------");
+//		model.addAttribute("list", service.getList());
+//	}
 	
 	@GetMapping("register")
 	public void register() {
