@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {ExampleApplication.class})
-@Slf4j
 @RunWith( SpringJUnit4ClassRunner.class )
+@Slf4j
 public class BoardControllerTest {
 	// 가짜(모조) MVC
 	// 마치 브라우저에서 URL을 요청한 것처럼 환경을 만들어 준다.
@@ -40,9 +40,16 @@ public class BoardControllerTest {
 	}
 	
 	// 해당 경로의 응답페이지가 없다면 오류 발생
-	@Test
+//	@Test
 	public void testList() throws Exception {
 		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list"))
+						.andReturn().getModelAndView().getModelMap().toString());
+	}
+	
+	@Test
+	public void testListWithPaging() throws Exception {
+		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list")
+						.param("pageNum", "1").param("amount", "7"))
 						.andReturn().getModelAndView().getModelMap().toString());
 	}
 	
