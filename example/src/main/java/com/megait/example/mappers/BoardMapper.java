@@ -5,9 +5,16 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.megait.example.beans.vo.BoardVO;
+import com.megait.example.beans.vo.Criteria;
 
 @Mapper
 public interface BoardMapper {
+	// 게시글 갯수
+	public int getTotal();
+	
+	// 게시글 목록(페이징 처리)
+	public List<BoardVO> getListWithPaging(Criteria cri);
+	
 	// 게시글 목록
 	public List<BoardVO> getList();
 	
