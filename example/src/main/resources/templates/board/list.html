@@ -7,6 +7,9 @@
 	<meta name="keyword" content="">
 	<link rel="stylesheet" href="/css/bootstrap/bootstrap.css" type="text/css">
 	<style>
+		.big-width { display: block; }
+		.small-width { display: none; }
+		
 		@media (max-width: 918px) {
 			.writer {display: none;}
 			.regDate {display: none;}
@@ -54,10 +57,24 @@
 				
 				</tfoot>
 			</table>
+			<div th:object="${pageMaker}">
+				<div class="big-width" style="text-align: center">
+					<a class="changePage" th:if="*{prev}" th:href="*{startPage - 1}">&lt;</a>
+					<th:block th:each="num : ${#numbers.sequence(pageMaker.getStartPage(), pageMaker.getEndPage())}">
+						<code th:if="${pageMaker.cri.getPageNum() == num}" th:text="${num}"></code>
+						<a class="changePage" th:unless="${pageMaker.cri.getPageNum() == num}" th:text="${num}" th:href="${num}"></a>
+					</th:block>
+					<a class="changePage" th:if="*{next}" th:href="*{endPage + 1}">&gt;</a>
+					<form action="/board/list" th:object="${criteria}" name="pageForm">
+						<input type="hidden" name="pageNum" th:field=*{pageNum}>
+						<input type="hidden" name="amount" th:field="*{amount}">
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
-<!-- <script th:src="@{js/jquery-3.6.4.min.js}"></script> -->
+<!-- <script th:src="@{/js/jquery-3.6.4.js}"></script> -->
 <script
   src="https://code.jquery.com/jquery-3.6.4.js"
   integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
@@ -66,6 +83,7 @@
 <script th:inline="javascript">
 	let bno = [[${bno}]];
 	console.log(bno);
+	let pageForm = $(document.pageForm);
 	
 	$(document).ready(function(){
 		if (bno == '') {
@@ -75,6 +93,14 @@
 		if (parseInt(bno) > 0) {
 			alert("Bulletin " + parseInt(bno) + " was registered.");
 		}
+	});
+	
+	$("a.changePage").click(function(e) {
+		//console.log("e : " + e);
+		e.preventDefault();  // a 링크 동작을 해야하지만 하지 못하게 함
+		let pageNum = $(this).attr("href");
+		pageForm.find("input[name='pageNum']").val(pageNum);
+		pageForm.submit();
 	});
 </script>
 </html>
