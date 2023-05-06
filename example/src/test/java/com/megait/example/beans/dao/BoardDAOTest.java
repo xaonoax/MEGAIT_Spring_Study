@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.megait.example.beans.vo.BoardVO;
+import com.megait.example.beans.vo.Criteria;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +41,8 @@ public class BoardDAOTest {
 	
 	@Test
 	public void testGetList() {
-		boardDAO.getList().forEach(board -> log.info("[testGetList] " + board.toString()));
+//		boardDAO.getList().forEach(board -> log.info("[testGetList] " + board.toString()));
+		boardDAO.getList(new Criteria(0, 5)).forEach(board -> log.info("---------------" + board.toString()));
 	}
 	
 //	@Test
