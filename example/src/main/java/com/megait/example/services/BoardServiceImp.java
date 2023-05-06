@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.megait.example.beans.dao.BoardDAO;
 import com.megait.example.beans.vo.BoardVO;
+import com.megait.example.beans.vo.Criteria;
 
 @Service
 public class BoardServiceImp implements BoardService{
@@ -38,4 +39,14 @@ public class BoardServiceImp implements BoardService{
 	public List<BoardVO> getList(){
 		return boardDAO.getList();
 	};
+	
+	@Override
+	public List<BoardVO> getList(Criteria cri){
+		return boardDAO.getList(cri);
+	};
+	
+	@Override
+	public int getTotal() {
+		return boardDAO.getTotal();
+	}
 }
