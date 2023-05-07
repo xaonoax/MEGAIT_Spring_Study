@@ -10,7 +10,7 @@ import com.megait.example.beans.vo.Criteria;
 @Mapper
 public interface BoardMapper {
 	// 게시글 갯수
-	public int getTotal();
+	public int getTotal(Criteria cri);
 	
 	// 게시글 목록(페이징 처리)
 	public List<BoardVO> getListWithPaging(Criteria cri);
