@@ -40,6 +40,7 @@
 			<input type="submit" value="삭제하기" onclick="goUpdate()">
 		</div>
 	</form>
+	<h3><a id="goList" href="#">To List</a></h3>
 </div>
 </body>
 <script
@@ -48,9 +49,16 @@
   crossorigin="anonymous">
 </script>
 <script th:inline="javascript">
+	let bno = [[${board.getBno()}]];
+	let paging = [[${cri.getListLink()}]];
+
 	function goUpdate() {
-		let bno = [[${board.getBno()}]];
-		location.href = '/board/modify?bno=' + bno;
+		location.href = "/board/modify" + paging + "&bno=" + bno;
 	}
+	
+	$("a#goList").click(function(e){
+		e.preventDefault();
+		location.href = "/board/list" + paging;
+	});
 </script>
 </html>
