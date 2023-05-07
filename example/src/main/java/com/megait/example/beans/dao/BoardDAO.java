@@ -38,8 +38,8 @@ public class BoardDAO {
 	}
 	
 	// 게시글 갯수 가져오기
-	public int getTotal() {
-		return mapper.getTotal();
+	public int getTotal(Criteria cri) {
+		return mapper.getTotal(cri);
 	}
 	
 	// 전체 게시글 가져오기(페이징)
