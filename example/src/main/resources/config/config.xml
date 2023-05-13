@@ -3,5 +3,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="boardVO" type="com.megait.example.beans.vo.BoardVO"></typeAlias>
+		<typeAlias alias="replyVO" type="com.megait.example.beans.vo.ReplyVO"></typeAlias>
 	</typeAliases>
 </configuration>
