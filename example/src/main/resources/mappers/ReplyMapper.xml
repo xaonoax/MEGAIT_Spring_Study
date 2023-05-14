@@ -17,6 +17,7 @@
 	<update id="update">
 		UPDATE TBL_REPLY
 		SET    REPLY = #{reply}
+			 , REPLIER = #{replier}
 		     , UPDATEDATE = SYSDATE()
 		WHERE RNO = #{rno}     
 	</update>
