@@ -2,8 +2,12 @@
 <html lang="en" xmlns:th="http://www.tymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>get</title>
+<title>Get</title>
 <link rel="stylesheet" href="/css/bootstrap/bootstrap.css" type="text/css">
+<script src="/js/reply.js"></script>
+<style>
+	.line { border-bottom: 1px solid #ff8b77; }
+</style>
 </head>
 <body>
 <div class="col-md-10" style="float:none; margin:0 auto;">
@@ -25,7 +29,7 @@
 			<h4>내용</h4>
 			<p th:text="*{content}" ></p>
 			-->
-			<textarea name="content" style="resize:none;" rows="6" th:text="*{content}" readonly></textarea>
+			<textarea name="content" style="resize:none;" rows="6" cols="100" th:text="*{content}" readonly></textarea>
 			<hr>
 			<!-- 두 가지 방식으로 작성함 : modify와의 소스 공유를 위해 2번으로 결정 -->
 			<!-- 1번
@@ -33,21 +37,39 @@
 			-->
 			작성자 : <input name="writer" type="text" th:field="*{writer}" readonly />
 			<hr>
-			<h4 th:text="'작성일자 : ' + *{regdate}"></h4>
-			<h4 th:text="'수정일자 : ' + *{updatedate}"></h4>
+			<h4 th:text="'작성일자 : ' + *{regdate}">작성일자 : 2023.04.03</h4>
+			<h4 th:text="'수정일자 : ' + *{updatedate}">수정일자 : 2023.04.03</h4>
 			<hr>
 			<input type="button" value="수정하기" onclick="goUpdate()">&nbsp;&nbsp;
-			<input type="submit" value="삭제하기" onclick="goUpdate()">
+			<input type="submit" value="삭제하기">
+			<hr>
+			<h4>Replies</h4>
+			<hr>
+			<!-- 
+			<ul>
+				<li style="display:block"><strong>댓글</strong></li>
+				<hr>
+				<li style="display:block">
+					<strong>user00</strong>
+					<p>Such a nice Job!</p>
+					<strong>2023-05-14 17:23</strong>
+					<div class="line"></div>
+				</li>
+			</ul>
+			-->
+			<ul class="replies"></ul>
+			
+			<h3><a id="goList" href="#">To List</a></h3>
 		</div>
 	</form>
-	<h3><a id="goList" href="#">To List</a></h3>
 </div>
 </body>
-<script
+<script th:src="@{/js/jquery.js}"></script>
+<!-- <script
   src="https://code.jquery.com/jquery-3.6.4.js"
   integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
   crossorigin="anonymous">
-</script>
+</script> -->
 <script th:inline="javascript">
 	let bno = [[${board.getBno()}]];
 	let paging = [[${cri.getListLink()}]];
@@ -57,8 +79,91 @@
 	}
 	
 	$("a#goList").click(function(e){
+		console.log("goList Clicked");
 		e.preventDefault();
 		location.href = "/board/list" + paging;
+	});
+</script>
+<script>
+	$(document).ready(function(){
+		console.log("JS Test");
+		
+		let bnoValue = [[${board.getBno()}]];
+		console.log("bnoValue = " + bnoValue);
+
+		// console.log(replyService);
+		/* let replyUL = $(".replies");
+		let pageNum = 1;
+		showList(pageNum);
+		
+		function showList(page){
+			replyService.getList(
+				{ bno: bnoValue, page: page || 1 },
+				function(list){
+					let str = "";
+					if (list == null || list.length == 0) {
+						replyUL.html("");
+						console.log("No...");
+						return;
+					}
+					console.log("There are some replies");
+					for(let i=0, len=list.length; i<len; i++){
+						console.log(list[i].replier);
+						str += "<li style='display:block' data-rno='" + list[i].rno + "'>";
+						str += list[i].replier + "(" + list[i].replydate + ")";
+						str += "<p>" + list[i].reply + "</p>";
+						str += "<div class='line'></div>;
+						str += "</li>";
+					}
+					replyUL.html(str);
+				}
+			);
+		} */
+		
+		// for Basic reply.js Test
+		/*
+		replyService.add(
+			{ reply:"Javascript Test", replier:"jstester", bno:bnoValue },
+			function(result){
+				alert("Result : " + result);
+			}
+		);
+		*/
+		
+		/*
+		replyService.getList(
+			{ bno: 4, page: 1 },
+			function(list){
+				console.log(list);
+			}
+		);
+		*/
+		
+		/*
+		replyService.remove(45,
+			function(result){
+				alert("Result : " + result);			
+			}
+		);
+		*/
+		
+		/*
+		replyService.update(
+			{ rno : 71, bno : bnoValue, reply : "Eleganced Reply" },
+			function(result){
+				alert("Result : " + result);
+			}
+		);
+		*/
+		
+		/*
+		replyService.get(62,
+			function(reply){
+				console.log(reply);
+			}
+		);
+		*/
+
 	});
 </script>
 </html>
