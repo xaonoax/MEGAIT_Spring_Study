@@ -57,6 +57,22 @@
 				</li>
 			</ul>
 			-->
+			<a href="javascript:void(0)" class="register">댓글 등록</a><br>
+			<div class="fields register-form" style="display: none;">
+				<div class="field">
+					<h4>작성자</h4>
+					<input type="text" name="replier" placeholder="Replier">
+				</div><br>
+				<div class="field">
+					<h4>댓글</h4>
+					<textarea rows="6" name="reply" placeholder="Reply" style="resize: none;"></textarea>
+				</div>
+				<div class="field">
+					<a href="javascript:void(0)" class="button primary small finish">등록</a>
+					<a href="javascript:void(0)" class="button primary small cancel">취소</a>
+				</div>
+			</div>
+			
 			<ul class="replies"></ul>
 			
 			<h3><a id="goList" href="#">To List</a></h3>
@@ -64,12 +80,7 @@
 	</form>
 </div>
 </body>
-<script th:src="@{/js/jquery.js}"></script>
-<!-- <script
-  src="https://code.jquery.com/jquery-3.6.4.js"
-  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-  crossorigin="anonymous">
-</script> -->
+<script th:src="@{/js/jquery-3.6.4.js}"></script>
 <script th:inline="javascript">
 	let bno = [[${board.getBno()}]];
 	let paging = [[${cri.getListLink()}]];
@@ -90,15 +101,109 @@
 		
 		let bnoValue = [[${board.getBno()}]];
 		console.log("bnoValue = " + bnoValue);
-
-		// console.log(replyService);
-		/* let replyUL = $(".replies");
+		
+		//console.log(replyService);
+		let replyUL = $(".replies");
 		let pageNum = 1;
 		showList(pageNum);
 		
+		$(".register").on("click", function(e){
+			e.preventDefault();
+			$(".register-form").show();
+			$(this).hide();
+		});
+		
+		$(".cancel").on("click", function(e, f, g){
+			e.preventDefault();
+			$(".register-form").hide();
+			$(".register").show();
+			console.log(f);
+			console.log(g);
+		});
+		
+		$(".finish").on("click", function(e){
+			e.preventDefault();
+			// 댓글 작성자, 댓글 내용
+			let replier = $("input[name='replier']").val();
+			let reply = $("textarea[name='reply']").val();
+			console.log("replier : " + replier);
+			console.log("reply : " + reply);
+			
+			if(replier == "" || reply == "") { return; }
+			
+			replyService.add({bno:bnoValue, reply:reply, replier:replier},
+				function(result){
+					alert(result);
+					$("input[name='replier']").val("");
+					$("textarea[name='reply']").val("");
+					$(".register-form").hide();
+					$(".register").show();
+					showList(pageNum);
+				}
+			);
+		});
+		
+		$(".replies").on("click", "a.remove", function(e){
+			e.preventDefault();
+			let rnoValue = $(this).attr("href");
+			console.log("rnoValue : " + rnoValue);
+			replyService.remove(rnoValue,
+				function(result){
+					alert(result);
+					showList(pageNum);
+				}
+			);
+		});
+		
+		let check = false;
+		
+		// 수정
+		$(".replies").on("click", "a.modify", function(e){
+			e.preventDefault();
+			if(check){
+				alert("수정 중인 댓글이 있습니다.");
+				return;
+			}
+			
+			// 1. p태그를 textarea로 변경(기존 내용을 textarea로 옮겨야 함)
+			// 2. 수정 완료 버튼
+			
+			let rnoValue = $(this).attr("href");
+			let replyTag = $("#reply" + rnoValue);
+			replyTag.html("<textarea style='width: 80%; resize: none' class='" + rnoValue + "'>"
+							+ replyTag.text() + "</textarea>");
+			$(this).hide();
+			
+			let finishes = $(".finish");
+			for(let i=0; i<finishes.length; i++){
+				if($(finishes[i]).attr("href")  == rnoValue){
+					$(finishes[i]).show();
+					check = true;
+					break;
+				}
+			}
+		});
+		
+		// 수정완료
+		$(".replies").on("click", "a.finish", function(e){
+			e.preventDefault();
+			
+			let rnoValue = $(this).attr("href");
+			let newReply = $("." + rnoValue).val();
+			
+			if(newReply == ""){ return; }
+			
+			replyService.update({rno:rnoValue, reply:newReply},
+				function(result){
+					alert(result);
+					check = false;
+					showList(pageNum);
+				}	
+			);
+		});
 		function showList(page){
 			replyService.getList(
-				{ bno: bnoValue, page: page || 1 },
+				{ bno: bnoValue, page : page || 1 },
 				function(list){
 					let str = "";
 					if (list == null || list.length == 0) {
@@ -111,14 +216,21 @@
 						console.log(list[i].replier);
 						str += "<li style='display:block' data-rno='" + list[i].rno + "'>";
 						str += list[i].replier + "(" + list[i].replydate + ")";
-						str += "<p>" + list[i].reply + "</p>";
-						str += "<div class='line'></div>;
+						str += "<p id='reply" + list[i].rno + "'>" + list[i].reply + "</p>";
+						
+						str += "<div style='text-align: right;'>";
+						str += "<a class='modify' href='" + list[i].rno + "'>수정</a>";
+						str += "<a class='finish' href='" + list[i].rno + "' style='display:none;'>수정완료</a>";
+						str += "&nbsp;&nbsp;";
+						str += "<a class='remove' href='" + list[i].rno + "'>삭제</a>";
+						str += "</div>";
+						str += "<div class='line'></div>";
 						str += "</li>";
 					}
 					replyUL.html(str);
 				}
 			);
-		} */
+		}
 		
 		// for Basic reply.js Test
 		/*
