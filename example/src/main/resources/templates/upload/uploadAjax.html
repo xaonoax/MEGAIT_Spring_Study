@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>File Upload</title>
+<style>
+	.uploadResult {
+		width: 100%;
+	}
+	
+	.uploadResult ul {
+		/* 컨테이너 안의 요소들이 행으로 나열된다. */
+		display: flex;
+		/* 가운데 정렬 */
+		justify-content: center;
+	}
+	
+	.uploadResult ul li {
+		list-style: none;
+		padding: 10px;
+	}
+</style>
+</head>
+<body>
+	<h1>File Upload Test(Ajax)</h1>
+	<hr>
+	<div class="uploadDiv">
+		<input type="file" name="uploadFile" multiple style="width: 200pt;"/>
+	</div>
+	<hr>
+	<div class="uploadResult">
+		<ul></ul>
+	</div>
+	<hr>
+	<button id="uploadBtn" style="width: 200pt;">Submit</button>
+</body>
+<script src="/js/jquery-3.6.4.js"></script>
+<script>
+	$(document).ready(function(){
+		// file extesion test를 위한 구현
+		let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+		let maxSize = 5242880;  // 5MB
+		
+		// 웹 브라우저에서 thumnail 처리
+		// 업로드 완료 후에 업로드 부분 초기화(첨부파일 초기화)
+		// 첨부 전 객체를 복사한 후 업로드 후에 덮어씌운다.
+		let cloneObj = $("uploadDiv").clone();
+		let uploadResult = $(".uploadResult ul");
+		
+		function showUploadFile(fileArray){
+			let str = "";
+			$(fileArray).each(function(i, obj){
+				if(obj.image){  // 이미지가 맞으면
+					// str += "<li>" + (i+1) + "." + obj.fileName + "</li>";
+					let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+					console.log(fileCallPath);
+					str += "<li><img src='/upload/display?fileName=" + fileCallPath + "'>" + obj.fileName + "</li>";
+				}
+				else{  // 이미지가 아니면
+					str += "<li><img src='/img/attach.png' width='30px'>" + (i+1) + "." + obj.fileName + "</li>";
+				}
+			});
+			uploadResult.append(str);
+		}
+		
+		// true이면 업로드 허용, false이면 업로드 불가
+		function checkExtension(fileName, fileSize){
+			if(regex.test(fileName)){
+				alert("잘못된 파일입니다.");
+				return false;
+			}
+			
+			if(fileSize >= maxSize){
+				alert("파일 용량을 확인하세요.");
+				return false;
+			}
+			
+			return true;
+		}
+		
+		$("#uploadBtn").on("click", function(e){
+			let inputFile = $("input[name='uploadFile']");
+			console.log(inputFile);
+			let files = inputFile[0].files;
+			console.log(files);
+			
+			// formData를 이용, formData에 file 추가하기
+			let formData = new FormData();
+			for(let i=0; i<files.length; i++){
+				if(!checkExtension(files[i].name, files[i].size)){
+					return;
+				}
+				formData.append("uploadFile", files[i]);
+			}
+			
+			$.ajax({
+				url: "uploadAjaxAction",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: "POST",
+/*				
+				success: function(){
+					alert("File Upload OK!!");
+				},
+*/
+				success: function(result){
+					console.log(result);
+					showUploadFile(result);
+					inputFile.val("");
+				},
+				error: function(){
+					alert("Error!!!");
+				}
+			});
+		});
+	});
+</script>
+</html>
